@@ -1,0 +1,29 @@
+name: Build Java JAR
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Java einrichten (JDK 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Mit Maven bauen und JAR erstellen
+        run: mvn clean package
+
+      - name: JAR-Datei als Artefakt speichern
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-jar
+          path: target/*.jar
